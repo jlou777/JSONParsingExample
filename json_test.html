@@ -1,0 +1,140 @@
+
+<head>
+       <style TYPE="text/css">
+       <!--
+		body {
+			background: black;
+			color: #80c0c0 
+		} 
+		ul {
+			margin: 0;
+		}
+		ul.dashed {
+			list-style-type: none;
+		}
+		ul.dashed > li {
+			text-indent: -10px;
+		}
+		ul.dashed > li:before {
+			content: "-   ";
+			text-indent: -10px;
+		}
+		div {
+			width: 600px;
+			background-color: #F5FCC1;
+			color: black
+		}
+  
+        -->
+      </style>
+	  
+	<title>JSON Parsing </title>
+	
+	<script type="text/javascript"> 
+	// Function to adjust the textarea height based on the input string
+	function setHeight(fieldId){
+		document.getElementById(fieldId).style.height = document.getElementById(fieldId).scrollHeight+'px';
+	}
+	// Function to parse the JSON input string and generate the out in the HTML format
+	function parseJSONInput() {
+		// Read the string in the textarea 
+		var contents = document.getElementById("jsonInput").value; 
+		try {
+			var obj = JSON.parse(contents);
+			var patientName = obj.name[0].given + " " + obj.name[0].family;
+			var orgName = obj.managingOrganization.display;
+			var gender = obj.gender;
+			var numOfCondition = obj.conditions.length;
+			var coditions = "<ul class=\"dashed\">";
+			for (i in obj.conditions) {
+				coditions += "<li>" + obj.conditions[i] + "</li>";
+			}
+	    
+			document.getElementById("userOutput").innerHTML = "Name of patient: " + patientName + "<br>" 
+												+ "Organization name: " + orgName + "<br>"  
+												+ "Gender: " + gender + "<br>" 
+												+ "Number of conditions: " + numOfCondition + "<br>" 
+												+ "List of all conditions: " + coditions;
+		}
+		catch (e){
+			// Throw any exception during the JSON processing as an "alert".
+			alert(e);
+		}	   
+	} 
+
+	</script>
+</head>
+ 
+<body>
+	<h1>JSON Parsing Assignment</h1> 
+	<h4>Submitted By: Jayson Lou, BCS/BBA Double Degree Student, University of Waterloo</h4>
+	<hr width="50%" align="left">
+	<form>
+		<label><b>Enter the JSON input here</b></label>
+		<p>
+		<textarea id="jsonInput" name="jsonInput" style="width:600px;" TextMode="MultiLine" onkeyup="setHeight('jsonInput');" onkeydown="setHeight('jsonInput');">
+{
+  "resourceType": "Patient",
+  "id": "xcda",
+  "text": { 
+    "status": "generated",
+    "div": "\n      \n      <p>Henry Levin the 7th</>\n    \n    </div>"
+  },
+  "identifier": [
+    {
+      "use": "usual",
+      "type": {
+        "coding": [
+          {
+            "system": "htt://hl7.org/fhir/v2/0203",
+            "code": "MR"
+          }
+        ]
+      },
+      "system": "urn:oid:2.16.840.1.113883.19.5",
+      "value": "12345"
+	  }
+  ],
+  "active": true,
+  "name": [
+    {
+      "family": [
+        "Levin"
+      ],
+      "given": [
+        "Henry"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "2002-09-24",
+  "managingOrganization": {
+    "reference": "Organization/2.16.840.1.113883.19.5",
+    "display": "University Health Network"
+  },
+  "conditions": [
+    "Diabetes",
+    "High blood pressure",
+    "Asthma"
+  ]
+}
+
+		</textarea>
+	</form>
+ 
+	<script type="text/javascript"> 
+		// Invoke "setHeight" to adjust the height of the textarea 
+		setHeight('jsonInput');
+	</script>
+
+	<p>Click the button to parse the JSON input and produce HTML output.</p>
+	<input type="submit" onclick="parseJSONInput();" value="Parse the JSON input"><br/>
+	<hr width="50%" align="left">
+	<label><b>The HTML output:</b></label>
+	<p><div id='userOutput'></div></p> 
+	<hr width="50%" align="left">
+	<p>
+	<a href="sourcecode.txt" target="_blank">Click here to read the source code of this webpage. </a>
+	</p>
+  
+</body>
